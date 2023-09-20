@@ -23,6 +23,9 @@ search_params = dict(checks=50)  # number of times the trees in the index should
 flann = cv.FlannBasedMatcher(index_params, search_params)
 matches = flann.knnMatch(des1, des2, k=2)
 
+# Returns a value where higher means a better match
+matchCheck = [m[0] for m in matches if len(m) == 2 and m[0].distance < m[1].distance * 0.75]
+
 # Need to draw only good matches, so create a mask
 matchesMask = [[0, 0] for i in range(len(matches))]
 
@@ -31,11 +34,12 @@ for i, (m, n) in enumerate(matches):
     if m.distance < 0.7 * n.distance:
         matchesMask[i] = [1, 0]
 
-draw_params = dict(matchColor=(0, 255, 0),
-                   singlePointColor=(255, 0, 0),
+draw_params = dict(matchColor=(0, 0, 255),
+                   singlePointColor=(0, 255, 0),
                    matchesMask=matchesMask,
                    flags=cv.DrawMatchesFlags_DEFAULT)
 
 img3 = cv.drawMatchesKnn(image8bit1, kp1, image8bit2, kp2, matches, None, **draw_params)
-print(matchesMask)
+# print(matchesMask)
+print(len(matchCheck))
 plt.imshow(img3, ), plt.show()
