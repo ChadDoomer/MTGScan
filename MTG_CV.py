@@ -1,6 +1,7 @@
 import numpy as np
 import cv2 as cv
 import matplotlib.pyplot as plt
+import flet as ft
 
 img1 = cv.imread('Test_Images/Scotch_1.jpg', cv.IMREAD_GRAYSCALE)  # queryImage
 img2 = cv.imread('Test_Images/Scotch_12.jpg', cv.IMREAD_GRAYSCALE)  # trainImage
