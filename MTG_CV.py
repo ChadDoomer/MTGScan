@@ -3,6 +3,8 @@ import cv2 as cv
 import matplotlib.pyplot as plt
 import flet as ft
 from PIL import Image
+import pytesseract
+
 
 def compare(localIMG, searchIMG):
     img1 = cv.imread(localIMG, cv.IMREAD_GRAYSCALE)  # queryImage
@@ -46,4 +48,62 @@ def compare(localIMG, searchIMG):
     # print(matchesMask)
     return len(matchCheck)
 
-    # plt.imshow(img3, ), plt.show()
+# the below function is magic that is kinda shitty
+def findText(inputImage):
+    output = ""
+
+    # Mention the installed location of Tesseract-OCR in your system
+    pytesseract.pytesseract.tesseract_cmd = 'Tesseract/tesseract.exe'
+
+    # Read image from which text needs to be extracted
+    img = cv.imread(inputImage)
+
+    # Convert the image to gray scale
+    gray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
+
+    # Performing OTSU threshold
+    ret, thresh1 = cv.threshold(gray, 0, 255, cv.THRESH_OTSU | cv.THRESH_BINARY_INV)
+
+    # Specify structure shape and kernel size.
+    # Kernel size increases or decreases the area
+    rect_kernel = cv.getStructuringElement(cv.MORPH_RECT, (20, 20))
+
+    # Applying dilation on the threshold image
+    dilation = cv.dilate(thresh1, rect_kernel, iterations=1)
+
+    # Finding contours
+    contours, hierarchy = cv.findContours(dilation, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_NONE)
+
+    # create a copy of the image
+    im2 = img.copy()
+
+    file = open("recognized.txt", "w+")
+    file.write("")
+    file.close()
+
+    for cnt in contours:
+        x, y, w, h = cv.boundingRect(cnt)
+
+        # Drawing a rectangle on copied image
+        rect = cv.rectangle(im2, (x, y), (x + w, y + h), (0, 255, 0), 2)
+
+        # Cropping the text block for giving input to OCR
+        cropped = im2[y:y + h, x:x + w]
+
+        # Open the file in append mode
+        file = open("recognized.txt", "a")
+
+        # Apply OCR on the cropped image
+        text = pytesseract.image_to_string(cropped)
+        output = text[:15]
+
+        # Appending the text into file
+        file.write(text)
+        file.write("\n")
+
+        # Close the file
+        file.close
+
+    formatted = output.replace(' ', ' o:')
+    print(formatted)
+    return formatted
