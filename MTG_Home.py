@@ -9,7 +9,7 @@ import ImageCrop
 def main(page: ft.Page):
     # declaring the images, input will eventually be the picture
     # and the output will be the result of the API script
-    inputImage = 'Test_Images/malfegor.jpg'
+    inputImage = 'Test_Images/archivist-of-oghma.jpg'
     outputImage = 'art.jpg'
 
     ImageCrop.crop(inputImage)
@@ -26,3 +26,4 @@ def main(page: ft.Page):
     page.add(ft.Text("Your card is:", size=30), name)
 
 ft.app(target=main)
+

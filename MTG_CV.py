@@ -95,7 +95,7 @@ def findText(inputImage):
 
         # Apply OCR on the cropped image
         text = pytesseract.image_to_string(cropped)
-        output = text[:15]
+        output = text[1:15]
 
         # Appending the text into file
         file.write(text)
@@ -104,6 +104,7 @@ def findText(inputImage):
         # Close the file
         file.close
 
-    formatted = output.replace(' ', ' o:')
+    formatted = output.replace(' ', '+')
+    # formatted_1 = formatted.replace('\n', ' o:')
     print(formatted)
     return formatted
