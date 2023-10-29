@@ -22,14 +22,41 @@ def searchForCard(inputImage):
     print(data)
 
     try:
-        cardArt = data['image_uris']['art_crop']
-    except:
         try:
-            for x in data['card_faces']:
-                cardArt = x['image_uris']['art_crop']
+            cardArt = data['image_uris']['art_crop']
         except:
-            print("This card is not found in the database, sorry.")
-            return "Not Found."
+            try:
+                for x in data['card_faces']:
+                    cardArt = x['image_uris']['art_crop']
+            except:
+                print("This card is not found in the database, sorry.")
+                return "Not Found."
+    except:
+        dataraw = requests.get(f"https://api.scryfall.com/cards/search?q=o:{query}")
+        data = dataraw.json()
+
+        for i in data['data']:
+            tempval = 0
+
+            # the below blurb extracts the card ID and image
+            ID = i['id']
+            try:
+                imageURI = i['image_uris']
+            except:
+                for x in i['card_faces']:
+                    imageURI = x['image_uris']
+            cardArt = imageURI['art_crop']
+
+            # writes the card art to art.jpg
+            urllib.request.urlretrieve(cardArt, "art.jpg")
+
+            # calls the CV comparision function
+            # and if the value is the highest so far
+            # then it becomes the current best
+            tempval = MTG_CV.compare(inputImage, "art.jpg")
+            if tempval > value:
+                value = tempval
+                final_ID = ID
 
     # writes the card art to art.jpg
     urllib.request.urlretrieve(cardArt, "art.jpg")
