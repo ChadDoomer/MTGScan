@@ -7,9 +7,35 @@ import MTG_CV
 import ImageCrop
 
 def main(page: ft.Page):
-    def button_clicked(e):
-        output_text.value = f"Dropdown value is:  {color_dropdown.value}"
-        inputImage = f'Test_Images/{color_dropdown.value}.jpg'
+    def pick_files_result(e: ft.FilePickerResultEvent):
+        selected_files.value = (
+            ", ".join(map(lambda f: f.name, e.files)) if e.files else "Cancelled!"
+        )
+        selected_files.update()
+
+    pick_files_dialog = ft.FilePicker(on_result=pick_files_result)
+    selected_files = ft.Text()
+
+    page.overlay.append(pick_files_dialog)
+
+    page.add(
+        ft.Row(
+            [
+                ft.ElevatedButton(
+                    "Pick files",
+                    icon=ft.icons.UPLOAD_FILE,
+                    on_click=lambda _: pick_files_dialog.pick_files(
+                        allow_multiple=False
+                    ),
+                ),
+                selected_files,
+            ]
+        )
+    )
+
+    def run_program(e):
+        inputImage = f'Test_Images/{selected_files.value}'
+        print(inputImage)
         outputImage = 'art.jpg'
 
         ImageCrop.crop(inputImage)
@@ -26,21 +52,14 @@ def main(page: ft.Page):
         page.add(ft.Text("Your card is:", size=30), name)
         page.update()
 
-    output_text = ft.Text()
-    submit_btn = ft.ElevatedButton(text="Submit", on_click=button_clicked)
-    color_dropdown = ft.Dropdown(
-        width=100,
-        options=[
-            ft.dropdown.Option("acclaimed_contender"),
-            ft.dropdown.Option("archivist-of-oghma"),
-            ft.dropdown.Option("arwen"),
-        ],
-    )
-    page.add(color_dropdown, submit_btn, output_text)
-    # declaring the images, input will eventually be the picture
-    # and the output will be the result of the API script
-    # inputImage = 'Test_Images/acclaimed_contender.jpg'
+        output_text = ft.Text()
 
+        page.add(output_text)
+        # declaring the images, input will eventually be the picture
+        # and the output will be the result of the API script
+
+    b = ft.ElevatedButton("Run the Program", on_click=run_program)
+    page.add(b)
 
 ft.app(target=main)
 

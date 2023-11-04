@@ -49,7 +49,7 @@ def compare(localIMG, searchIMG):
     return len(matchCheck)
 
 # the below function is magic that is kinda shitty
-def findText(inputImage):
+def findText(inputImage, switch):
     output = ""
 
     # Mention the installed location of Tesseract-OCR in your system
@@ -95,7 +95,7 @@ def findText(inputImage):
 
         # Apply OCR on the cropped image
         text = pytesseract.image_to_string(cropped)
-        output = text[1:15]
+        output = text[1:40]
 
         # Appending the text into file
         file.write(text)
@@ -104,7 +104,22 @@ def findText(inputImage):
         # Close the file
         file.close
 
+    if switch == 1:
+        formatted_1 = '"' + output + '"'
+        print(formatted_1)
+        return formatted_1
+
     formatted = output.replace(' ', '+')
-    # formatted_1 = formatted.replace('\n', ' o:')
+
     print(formatted)
     return formatted
+
+"""
+    if switch == 1:
+        formatted_1 = formatted.replace('\n', ' o:')
+        print(formatted_1)
+        return formatted_1
+"""
+
+
+
