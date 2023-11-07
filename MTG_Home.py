@@ -3,6 +3,8 @@ import MTG_API
 import ImageCrop
 
 def main(page: ft.Page):
+
+    # file picker function
     def pick_files_result(e: ft.FilePickerResultEvent):
         selected_files.value = (
             ", ".join(map(lambda f: f.name, e.files)) if e.files else "Cancelled!"
@@ -29,6 +31,7 @@ def main(page: ft.Page):
         )
     )
 
+    # function that runs the program
     def run_program(e):
         inputImage = f'Test_Images/{selected_files.value}'
         print(inputImage)
