@@ -5,7 +5,10 @@ import cv2 as cv
 
 def crop(inputImage):
     img = cv.imread(inputImage)
-    print(img.shape)
+    try:
+        print(img.shape)
+    except:
+        print("Please choose a file from the Test Images folder.")
     height = img.shape[0]
     width = img.shape[1]
 
