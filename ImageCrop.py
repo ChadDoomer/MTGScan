@@ -1,6 +1,3 @@
-import matplotlib.pyplot as plt
-import MTG_API
-import MTG_CV
 import cv2 as cv
 
 def crop(inputImage):

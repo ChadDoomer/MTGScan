@@ -1,8 +1,4 @@
-import numpy as np
 import cv2 as cv
-import matplotlib.pyplot as plt
-import flet as ft
-from PIL import Image
 import pytesseract
 
 
