@@ -1,9 +1,11 @@
 import flet as ft
+import cv2
 import MTG_API
 import ImageCrop
 
 def main(page: ft.Page):
 
+    url = ""
     # file picker function
     def pick_files_result(e: ft.FilePickerResultEvent):
         selected_files.value = (
@@ -20,7 +22,7 @@ def main(page: ft.Page):
         ft.Row(
             [
                 ft.ElevatedButton(
-                    "Pick files",
+                    "Pick file",
                     icon=ft.icons.UPLOAD_FILE,
                     on_click=lambda _: pick_files_dialog.pick_files(
                         allow_multiple=False
@@ -31,9 +33,35 @@ def main(page: ft.Page):
         )
     )
 
+    def url_button(e):
+        if not txt_url.value:
+            txt_url.error_text = "Please enter the url"
+            page.update()
+        else:
+            url = txt_url.value + "/video"
+            print(url)
+            a = ft.ElevatedButton("Open Camera", on_click=camera(url))
+
+    txt_url = ft.TextField(label="Download IP Webcam on your Android device and enter the IPv4 value.")
+    page.add(txt_url, ft.ElevatedButton("Enter your url.", on_click=url_button))
+
+    def camera(url):
+        cap = cv2.VideoCapture(url)
+        while (True):
+            ret, frame = cap.read()
+            if frame is not None:
+                cv2.imshow('frame', frame)
+            q = cv2.waitKey(1)
+            if q == ord("q"):
+                cv2.imwrite("picture.jpg", frame)
+                ImageCrop.rotate("picture.jpg")
+                break
+        cv2.destroyAllWindows()
+
     # function that runs the program
     def run_program(e):
-        inputImage = f'Test_Images/{selected_files.value}'
+        # inputImage = f'Test_Images/{selected_files.value}'
+        inputImage = 'rotated_picture.jpg'
         print(inputImage)
         outputImage = 'art.jpg'
 

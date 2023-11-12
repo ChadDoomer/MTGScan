@@ -30,3 +30,8 @@ def crop(inputImage):
     cv.imwrite("bottom.jpg", s2)
     cv.imwrite("name.jpg", s3)
     cv.imwrite("fullname.jpg", s4)
+
+def rotate(inputImage):
+    img = cv.imread(inputImage)
+    rotatedImage = cv.rotate(img, cv.ROTATE_90_CLOCKWISE)
+    cv.imwrite("rotated_picture.jpg", rotatedImage)
