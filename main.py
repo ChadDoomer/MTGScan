@@ -43,7 +43,7 @@ def main(page: ft.Page):
             a = ft.ElevatedButton("Open Camera", on_click=camera(url))
 
     txt_url = ft.TextField(label="Download IP Webcam on your Android device and enter the IPv4 value.")
-    page.add(txt_url, ft.ElevatedButton("Enter your url.", on_click=url_button))
+    page.add(txt_url, ft.ElevatedButton("Access the camera.", on_click=url_button))
 
     def camera(url):
         cap = cv2.VideoCapture(url)
@@ -60,8 +60,10 @@ def main(page: ft.Page):
 
     # function that runs the program
     def run_program(e):
-        # inputImage = f'Test_Images/{selected_files.value}'
-        inputImage = 'rotated_picture.jpg'
+        if txt_url.value == "":
+            inputImage = f'Test_Images/{selected_files.value}'
+        else:
+            inputImage = 'rotated_picture.jpg'
         print(inputImage)
         outputImage = 'art.jpg'
 
